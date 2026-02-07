@@ -1,6 +1,6 @@
 import {
-    productSchema,
-    updateProductSchema,
+    productSchemaValidator,
+    updateProductSchemaValidator,
 } from "../utils/product.validation.js";
 import Product from "../models/product.model.js";
 
@@ -53,7 +53,7 @@ export const getProductById = async (req, res, next) => {
 
 export const createProduct = async (req, res, next) => {
     try {
-        const { error } = productSchema.validate(req.body);
+        const { error } = productSchemaValidator.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
         }
@@ -68,7 +68,7 @@ export const createProduct = async (req, res, next) => {
     }
 };
 export const updateProduct = async (req, res, next) => {
-    const { error } = updateProductSchema.validate(req.body);
+    const { error } = updateProductSchemaValidator.validate(req.body);
     if (error) {
         return res.status(400).json({ message: error.details[0].message });
     }

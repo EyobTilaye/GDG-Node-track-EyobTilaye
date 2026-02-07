@@ -3,14 +3,14 @@ import Product from "../models/product.model.js";
 import Cart from "../models/cart.model.js";
 import User from "../models/user.model.js";
 import {
-    cartSchema,
-    updateCartSchema,
-    deleteFromCartSchema,
+    cartSchemaValidator,
+    updateCartSchemaValidator,
+    deleteFromCartSchemaValidator,
 } from "../utils/cart.validation.js";
 
 export const addToCart = async (req, res, next) => {
     try {
-        const { error } = cartSchema.validate(req.body);
+        const { error } = cartSchemaValidator.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
         }
@@ -78,7 +78,7 @@ export const viewCurrentCart = async (req, res, next) => {
 
 export const updateCart = async (req, res, next) => {
     try {
-        const { error } = updateCartSchema.validate(req.body);
+        const { error } = updateCartSchemaValidator.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
         }
@@ -121,7 +121,7 @@ export const updateCart = async (req, res, next) => {
 export const deleteFromCart = async (req, res, next) => {
     try {
         const { productId } = req.params;
-        const { error } = deleteFromCartSchema.validate(req.body);
+        const { error } = deleteFromCartSchemaValidator.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
         }

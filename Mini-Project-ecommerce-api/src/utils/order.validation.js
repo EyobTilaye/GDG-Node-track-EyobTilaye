@@ -1,5 +1,5 @@
 import Joi from "joi";
 
-export const orderSchema = Joi.object({
+export const orderSchemaValidator = Joi.object({
     userId: Joi.string().required(),
 });

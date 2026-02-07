@@ -1,11 +1,11 @@
 import Order from "../models/order.model.js";
 import User from "../models/user.model.js";
 import Cart from "../models/cart.model.js";
-import { orderSchema } from "../utils/order.validation.js";
+import { orderSchemaValidator } from "../utils/order.validation.js";
 
 export const createOrder = async (req, res, next) => {
     try {
-        const { error } = orderSchema.validate(req.body);
+        const { error } = orderSchemaValidator.validate(req.body);
         if (error) {
             return res.status(400).json({ message: error.details[0].message });
         }
