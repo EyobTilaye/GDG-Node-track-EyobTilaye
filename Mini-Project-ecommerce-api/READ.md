@@ -176,7 +176,8 @@ Content-Type: application/json
         "category": "electronics",
         "imageUrl": "",
         "__v": 0
-    }
+    },
+    "message": "Product successfully updated."
 }
 ```
 
@@ -225,7 +226,7 @@ GET http://localhost:5500/carts
 ```json
 {
     "data": {
-        "_id": "69849d16d9854a7adf2c1234",
+        "userId": "69849d16d9854a7adf2c1234",
         "items": [
             {
                 "productId": "6985397578cceb20afc73516",
@@ -233,8 +234,7 @@ GET http://localhost:5500/carts
                 "price": 50,
                 "quantity": 2
             }
-        ],
-        "totalPrice": 100
+        ]
     }
 }
 ```
@@ -254,8 +254,11 @@ POST http://localhost:5500/carts
 Content-Type: application/json
 
 {
-  "productId": "6985397578cceb20afc73516",
-  "quantity": 2
+    "userId" : "69849d16d9854a7adf2c1234",
+    "item: {
+        productId": "6985397578cceb20afc73516",
+        "quantity": 2
+    }
 }
 ```
 
@@ -264,16 +267,13 @@ Content-Type: application/json
 ```json
 {
     "data": {
-        "_id": "69849d16d9854a7adf2c1234",
+        "uerId": "69849d16d9854a7adf2c1234",
         "items": [
             {
                 "productId": "6985397578cceb20afc73516",
-                "name": "iphone",
-                "price": 50,
                 "quantity": 2
             }
-        ],
-        "totalPrice": 100
+        ]
     }
 }
 ```
@@ -293,8 +293,11 @@ PUT http://localhost:5500/carts
 Content-Type: application/json
 
 {
-  "productId": "6985397578cceb20afc73516",
-  "quantity": 3
+    "userId": "69849d16d9854a7adf2c1234",
+    "items":{
+        "productId": "6985397578cceb20afc73516",
+        "quantity": 3
+    }
 }
 ```
 
@@ -311,8 +314,7 @@ Content-Type: application/json
                 "price": 50,
                 "quantity": 3
             }
-        ],
-        "totalPrice": 150
+        ]
     }
 }
 ```
@@ -340,8 +342,7 @@ DELETE http://localhost:5500/carts/6985397578cceb20afc73516
     "message": "Item removed from cart",
     "data": {
         "_id": "69849d16d9854a7adf2c1234",
-        "items": [],
-        "totalPrice": 0
+        "items": []
     }
 }
 ```
@@ -354,7 +355,7 @@ DELETE http://localhost:5500/carts/6985397578cceb20afc73516
 
 - **Method:** `POST`
 - **Path:** `/orders`
-- **Description:** Create a new order from the current cart
+- **Description:** Create a new order from the current cart and the userId is required to identify the user
 
 **Request:**
 
@@ -363,9 +364,7 @@ POST http://localhost:5500/orders
 Content-Type: application/json
 
 {
-  "cartId": "69849d16d9854a7adf2c1234",
-  "shippingAddress": "123 Main St, City, State 12345",
-  "paymentMethod": "credit_card"
+  "userId" : "69849d16d9854a7adf2c1234"
 }
 ```
 
@@ -373,9 +372,9 @@ Content-Type: application/json
 
 ```json
 {
+    "message": "Order created successfully",
     "data": {
-        "_id": "6985c12af03d168c84a5b678",
-        "cartId": "69849d16d9854a7adf2c1234",
+        "userId": "6985c12af03d168c84a5b678",
         "items": [
             {
                 "productId": "6985397578cceb20afc73516",
@@ -384,11 +383,11 @@ Content-Type: application/json
                 "quantity": 2
             }
         ],
-        "totalPrice": 100,
-        "shippingAddress": "123 Main St, City, State 12345",
-        "paymentMethod": "credit_card",
-        "status": "pending",
-        "createdAt": "2024-01-15T10:30:00Z"
+        "total": 100,
+        "customerInfo": {
+            "name": "Eyob"
+        },
+        "orderDate": "2026-02-06T10:30:00Z"
     }
 }
 ```
@@ -413,18 +412,20 @@ GET http://localhost:5500/orders
 {
     "data": [
         {
-            "_id": "6985c12af03d168c84a5b678",
-            "cartId": "69849d16d9854a7adf2c1234",
-            "totalPrice": 100,
-            "status": "pending",
-            "createdAt": "2024-01-15T10:30:00Z"
-        },
-        {
-            "_id": "6985c15bf03d168c84a5b789",
-            "cartId": "69849d16d9854a7adf2c5678",
-            "totalPrice": 250,
-            "status": "completed",
-            "createdAt": "2024-01-14T15:20:00Z"
+            "userId": "6985c12af03d168c84a5b678",
+            "items": [
+                {
+                    "productId": "6985397578cceb20afc73516",
+                    "name": "iphone",
+                    "price": 50,
+                    "quantity": 2
+                }
+            ],
+            "total": 100,
+            "customerInfo": {
+                "name": "Eyob"
+            },
+            "orderDate": "2026-02-06T10:30:00Z"
         }
     ]
 }
@@ -452,7 +453,6 @@ GET http://localhost:5500/orders/6985c12af03d168c84a5b678
 {
     "data": {
         "_id": "6985c12af03d168c84a5b678",
-        "cartId": "69849d16d9854a7adf2c1234",
         "items": [
             {
                 "productId": "6985397578cceb20afc73516",
@@ -461,11 +461,11 @@ GET http://localhost:5500/orders/6985c12af03d168c84a5b678
                 "quantity": 2
             }
         ],
-        "totalPrice": 100,
-        "shippingAddress": "123 Main St, City, State 12345",
-        "paymentMethod": "credit_card",
-        "status": "pending",
-        "createdAt": "2024-01-15T10:30:00Z"
+        "total": 100,
+        "customerInfo": {
+            "name": "Eyob"
+        },
+        "orderDate": "2026-02-06T10:30:00Z"
     }
 }
 ```
@@ -507,6 +507,5 @@ GET /products?category=electronics&minPrice=15&maxPrice=60
 
 1. Ensure the API server is running on `http://localhost:5500`
 2. Use the endpoints above to interact with products, carts, and orders
-3. All responses follow the standard JSON format with a `data` wrapper
+3. All responses follow the standard JSON format
 4. Product IDs are MongoDB ObjectIds in string format
-5. Include `Content-Type: application/json` header for POST and PUT requests
