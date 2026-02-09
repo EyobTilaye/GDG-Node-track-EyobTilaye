@@ -32,13 +32,14 @@ export const addToCart = async (req, res, next) => {
                 .json({ message: "Insufficient avaliable stock level" });
         }
         //to check whether the use created a cart before or not
-        let cart = await Cart.findOne({ userId });
+        let cart = await Cart.findOne({ userId }).populate("items.productId");
         if (!cart) {
             cart = await Cart.create({
                 userId,
                 items: [],
             });
         }
+        // this checks if the product is already in the cart or not
         const existingProductIndex = cart.items.findIndex(
             (item) => item.productId.toString() === productId,
         );
