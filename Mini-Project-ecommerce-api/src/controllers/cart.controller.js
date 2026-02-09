@@ -109,6 +109,18 @@ export const updateCart = async (req, res, next) => {
                 .status(404)
                 .json({ message: "Product not found in the cart" });
         }
+
+        // when the item found in the cart then we need to check whether the new quantity is less than or equal to the available stock
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+        if (product.stock < quantity) {
+            return res
+                .status(400)
+                .json({ message: "Insufficient available stock level" });
+        }
+        // the new found and quanitity is valid we can save the updated value to the database
         await cart.save();
         res.status(200).json({
             message: "Cart updated successfully",
