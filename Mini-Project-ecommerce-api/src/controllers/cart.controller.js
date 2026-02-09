@@ -144,8 +144,10 @@ export const deleteFromCart = async (req, res, next) => {
             return res.status(404).json({ message: "User not found" });
         }
         const cart = await Cart.findOne({ userId });
-        if (!cart) {
-            return res.status(404).json({ message: "Cart not found" });
+        if (!cart || cart.items.length === 0) {
+            return res
+                .status(404)
+                .json({ message: "Cart not found or is empty" });
         }
         console.log("Product ID to delete:", productId);
         console.log("Current cart items:", cart.items);
